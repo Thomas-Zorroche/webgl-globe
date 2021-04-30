@@ -62,7 +62,7 @@ DAT.Globe = function(container, opts) {
         'varying vec3 vNormal;',
         'void main() {',
           'float intensity = pow( 0.8 - dot( vNormal, vec3( 0, 0, 1.0 ) ), 12.0 ) * 0.5;',
-          'gl_FragColor = vec4( 0.2, 0.8, 0.2, 1.0 ) * intensity;',
+          'gl_FragColor = vec4( 0.9, 0.8, 0.2, 1.0 ) * intensity;',
         '}'
       ].join('\n')
     }
@@ -340,6 +340,7 @@ DAT.Globe = function(container, opts) {
   }
 
   function zoom(delta) {
+
     distanceTarget -= delta;
     distanceTarget = distanceTarget > 1000 ? 1000 : distanceTarget;
     distanceTarget = distanceTarget < 350 ? 350 : distanceTarget;
@@ -350,17 +351,55 @@ DAT.Globe = function(container, opts) {
     render();
   }
 
-  function render() {
-    // Degrees to radians
-  //   var phi = (90 - lat) * Math.PI / 180;
-  //   var theta = (180 - lng) * Math.PI / 180;
+  function getLatitudeAndLongitude() {
+    const latitude = rotation.y * (180 / Math.PI);
+    
+    let longitude;
+    if (Math.floor((rotation.x - 4.71239) / Math.PI) % 2 != 0)
+    {
+      if ((((rotation.x * (180 / Math.PI)) - 270) % 180) > 0)
+        longitude = -180 + Math.abs( (((rotation.x * (180 / Math.PI)) - 270) % 180) ); // longitude en rad
+      else
+        longitude = 0 - Math.abs( (((rotation.x * (180 / Math.PI)) - 270) % 180) ); // longitude en rad
+    }
+    else
+    {
+      if ((((rotation.x * (180 / Math.PI)) - 270) % 180) > 0)
+        longitude = ((rotation.x * (180 / Math.PI)) - 270) % 180; // longitude en rad
+      else
+        longitude = 180 - Math.abs( (((rotation.x * (180 / Math.PI)) - 270) % 180) ); // longitude en rad
+    }
 
-  // Radians to degrees
-    //console.log( 90 - (camera.rotation.z * (180 / Math.PI)))
-    console.log(camera.rotation.z  * (180 / Math.PI))
+    return [latitude, longitude];
+  }
+
+  function render() {
+
 
     zoom(curZoomSpeed);
 
+    const coordinatesCamera = getLatitudeAndLongitude();
+    const coordinatesCity = [
+      [  40.6643, -73.9385, "NewYork" ],
+      [  35.6894,  139.692, "Tokyo" ], 
+      [  37.9816,  23.7308, "Athènes" ], 
+      [ -33.9258,  18.4232,  "Le Cap" ]
+    ];
+    const precision = 5;
+
+    let cityFound = false;
+    coordinatesCity.forEach(city => {
+        if (Math.abs(coordinatesCamera[0] - city[0]) < 5 && Math.abs(coordinatesCamera[1] - city[1]) < 5)
+        {
+          document.getElementById("City").innerHTML = city[2];
+          cityFound = true;
+        }
+        else if (!cityFound)
+        {
+          document.getElementById("City").innerHTML = "";
+        }
+    });
+    
     rotation.x += (target.x - rotation.x) * 0.1;
     rotation.y += (target.y - rotation.y) * 0.1;
     distance += (distanceTarget - distance) * 0.3;
