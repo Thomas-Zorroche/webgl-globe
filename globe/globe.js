@@ -380,10 +380,10 @@ DAT.Globe = function(container, opts) {
 
     const coordinatesCamera = getLatitudeAndLongitude();
     const coordinatesCity = [
-      [  40.6643, -73.9385, "NewYork" ],
-      [  35.6894,  139.692, "Tokyo" ], 
-      [  37.9816,  23.7308, "Athènes" ], 
-      [ -33.9258,  18.4232,  "Le Cap" ]
+      [  40.6643,  73.9385, "New-York", "NY message ici .... " ],
+      [  35.6894,  139.692, "Tokyo", "Tokyo message ici .... " ], 
+      [  37.9816,  23.7308, "Athènes", "Athènes message ici .... " ], 
+      [ -33.9258,  18.4232,  "Le Cap", "Le Cap message ici .... " ]
     ];
     const precision = 5;
 
