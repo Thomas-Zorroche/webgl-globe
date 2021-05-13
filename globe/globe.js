@@ -184,13 +184,8 @@ DAT.Globe = function(container, opts) {
     if (opts.animated) {
       if (this._baseGeometry === undefined) {
         this._baseGeometry = new THREE.Geometry();
-        for (i = 0; i < data.length; i += step) {
-          lat = data[i];
-          lng = data[i + 1];
-//        size = data[i + 2];
-          color = colorFnWrapper(data,i);
-          size = 0;
-          addPoint(lat, lng, size, color, this._baseGeometry);
+        for (i = 0; i < data.claim.length; i++) {
+          addPoint(data.claim[i].latitude, data.claim[i].longitude, 0, {r: 255, g:0, b:0}, this._baseGeometry);
         }
       }
       if(this._morphTargetId === undefined) {
@@ -201,14 +196,11 @@ DAT.Globe = function(container, opts) {
       opts.name = opts.name || 'morphTarget'+this._morphTargetId;
     }
     var subgeo = new THREE.Geometry();
-    for (i = 0; i < data.length; i += step) {
-      lat = data[i];
-      lng = data[i + 1];
-      color = colorFnWrapper(data,i);
-      size = data[i + 2];
-      size = size*200;
-      addPoint(lat, lng, size, color, subgeo);
+
+    for (i = 0; i < data.claim.length; i++) {
+      addPoint(data.claim[i].latitude, data.claim[i].longitude, 0, {r: 0, g:0, b:255}, subgeo);
     }
+
     if (opts.animated) {
       this._baseGeometry.morphTargets.push({'name': opts.name, vertices: subgeo.vertices});
     } else {
