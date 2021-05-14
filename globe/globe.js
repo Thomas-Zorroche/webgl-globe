@@ -165,8 +165,45 @@ DAT.Globe = function(container, opts) {
     }, false);
   }
 
+  function lerp (start, end, t) {
+    return start * (1 - t) + end * t;
+  }
+
+    /* accepts parameters
+  * h  Object = {h:x, s:y, v:z}
+  * OR 
+  * h, s, v
+  */
+  function HSVtoRGB(h, s, v) {
+    var r, g, b, i, f, p, q, t;
+    if (arguments.length === 1) {
+        s = h.s, v = h.v, h = h.h;
+    }
+    i = Math.floor(h * 6);
+    f = h * 6 - i;
+    p = v * (1 - s);
+    q = v * (1 - f * s);
+    t = v * (1 - (1 - f) * s);
+    switch (i % 6) {
+        case 0: r = v, g = t, b = p; break;
+        case 1: r = q, g = v, b = p; break;
+        case 2: r = p, g = v, b = t; break;
+        case 3: r = p, g = q, b = v; break;
+        case 4: r = t, g = p, b = v; break;
+        case 5: r = v, g = p, b = q; break;
+    }
+    return {
+        r: Math.round(r * 255) / 255,
+        g: Math.round(g * 255) / 255,
+        b: Math.round(b * 255) / 255
+    };
+  }
+
   function addData(data, opts) {
-    var lat, lng, size, color, i, step, colorFnWrapper;
+    var i, step, colorFnWrapper;
+
+    const coldTemperatureHue = 240;
+    const warmTemperatureHue = 0;
 
     opts.animated = opts.animated || false;
     this.is_animated = opts.animated;
@@ -185,7 +222,9 @@ DAT.Globe = function(container, opts) {
       if (this._baseGeometry === undefined) {
         this._baseGeometry = new THREE.Geometry();
         for (i = 0; i < data.length; i++) {
-            addPoint(data[i].Latitude, data[i].Longitude, 0, {r: 255, g:0, b:0}, this._baseGeometry);
+          let tempRate = ((parseInt(data[i].AverageTemperature) + 20) / 60.0)
+          let hue = coldTemperatureHue - (tempRate * (coldTemperatureHue - warmTemperatureHue));
+          addPoint(data[i].Latitude, data[i].Longitude, 50 * tempRate, HSVtoRGB(hue / 360, 1, 1), this._baseGeometry);
         }
       }
       if(this._morphTargetId === undefined) {
@@ -198,7 +237,10 @@ DAT.Globe = function(container, opts) {
     var subgeo = new THREE.Geometry();
 
     for (i = 0; i < data.length; i++) {
-      addPoint(data[i].Latitude, data[i].Longitude, 0, {r: 255, g:0, b:0}, subgeo);
+      // 0 : cold --> 1 : warm
+      let tempRate = ((parseInt(data[i].AverageTemperature) + 20) / 60.0)
+      let hue = coldTemperatureHue - (tempRate * (coldTemperatureHue - warmTemperatureHue));
+      addPoint(data[i].Latitude, data[i].Longitude, 50 * tempRate, HSVtoRGB(hue / 360, 1, 1), subgeo);
     }
 
     if (opts.animated) {
