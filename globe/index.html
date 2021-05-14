@@ -175,20 +175,17 @@
       var xhr;
       TWEEN.start();
       
+
       xhr = new XMLHttpRequest();
       // xhr.open('GET', 'population909500.json', true);
-      xhr.open('GET', 'output.json', true);
+      //xhr.open('GET', 'claim.json', true);
+      xhr.open('GET', './archive_temperature/GlobalLandTemperaturesByMajorCity.json', true);
       xhr.onreadystatechange = function(e) {
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {
             var data = JSON.parse(xhr.responseText);
             window.data = data;
-            for (i = 0; i < /*data.length*/ 5; i++) {
-              globe.addData(
-                data,
-                {format: 'magnitude', name: 5, animated: true}
-              );
-            }
+            globe.addData(data, {format: 'magnitude', name: 5, animated: true});
             globe.createPoints();
             settime(globe,0)();
             globe.animate();

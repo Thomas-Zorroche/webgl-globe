@@ -184,8 +184,8 @@ DAT.Globe = function(container, opts) {
     if (opts.animated) {
       if (this._baseGeometry === undefined) {
         this._baseGeometry = new THREE.Geometry();
-        for (i = 0; i < data.claim.length; i++) {
-          addPoint(data.claim[i].latitude, data.claim[i].longitude, 0, {r: 255, g:0, b:0}, this._baseGeometry);
+        for (i = 0; i < data.length; i++) {
+            addPoint(data[i].Latitude, data[i].Longitude, 0, {r: 255, g:0, b:0}, this._baseGeometry);
         }
       }
       if(this._morphTargetId === undefined) {
@@ -197,8 +197,8 @@ DAT.Globe = function(container, opts) {
     }
     var subgeo = new THREE.Geometry();
 
-    for (i = 0; i < data.claim.length; i++) {
-      addPoint(data.claim[i].latitude, data.claim[i].longitude, 0, {r: 0, g:0, b:255}, subgeo);
+    for (i = 0; i < data.length; i++) {
+      addPoint(data[i].Latitude, data[i].Longitude, 0, {r: 255, g:0, b:0}, subgeo);
     }
 
     if (opts.animated) {
@@ -367,7 +367,7 @@ DAT.Globe = function(container, opts) {
 
   function render() {
 
-
+    
     zoom(curZoomSpeed);
 
     const coordinatesCamera = getLatitudeAndLongitude();

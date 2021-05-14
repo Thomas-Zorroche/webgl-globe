@@ -1,0 +1,602 @@
+[
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "28.270000000000003",
+        "Latitude": "5.63",
+        "Longitude": "-3.23"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "18.39",
+        "Latitude": "8.84",
+        "Longitude": "38.11"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "20.969",
+        "Latitude": "23.31",
+        "Longitude": "72.52"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "8.779",
+        "Latitude": "36.17",
+        "Longitude": "37.79"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "16.259",
+        "Latitude": "31.35",
+        "Longitude": "30.16"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "1.962",
+        "Latitude": "39.38",
+        "Longitude": "33.29"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "13.440999999999999",
+        "Latitude": "32.95",
+        "Longitude": "45.00"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "23.816000000000006",
+        "Latitude": "12.05",
+        "Longitude": "77.26"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "26.615",
+        "Latitude": "13.66",
+        "Longitude": "99.91"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "24.349",
+        "Latitude": "-20.09",
+        "Longitude": "-44.36"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "-4.702",
+        "Latitude": "52.24",
+        "Longitude": "13.14"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "21.916",
+        "Latitude": "4.02",
+        "Longitude": "-74.73"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "26.12",
+        "Latitude": "18.48",
+        "Longitude": "72.68"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "23.416999999999998",
+        "Latitude": "-15.27",
+        "Longitude": "-47.50"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "15.835",
+        "Latitude": "29.74",
+        "Longitude": "31.38"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "17.503",
+        "Latitude": "23.31",
+        "Longitude": "88.25"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "23.713",
+        "Latitude": "4.02",
+        "Longitude": "-76.34"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "19.913",
+        "Latitude": "-32.95",
+        "Longitude": "18.19"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "11.24",
+        "Latitude": "32.95",
+        "Longitude": "-6.70"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "-15.830000000000002",
+        "Latitude": "44.20",
+        "Longitude": "125.22"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "2.434",
+        "Latitude": "31.35",
+        "Longitude": "103.66"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "-0.5949999999999999",
+        "Latitude": "42.59",
+        "Longitude": "-87.27"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "7.921",
+        "Latitude": "29.74",
+        "Longitude": "107.08"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "23.188000000000002",
+        "Latitude": "15.27",
+        "Longitude": "-17.50"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "-5.4590000000000005",
+        "Latitude": "39.38",
+        "Longitude": "120.69"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "28.256",
+        "Latitude": "-7.23",
+        "Longitude": "39.73"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "14.014000000000001",
+        "Latitude": "28.13",
+        "Longitude": "77.27"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "17.354000000000006",
+        "Latitude": "23.31",
+        "Longitude": "90.00"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "23.346999999999998",
+        "Latitude": "-29.74",
+        "Longitude": "31.38"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "11.81",
+        "Latitude": "31.35",
+        "Longitude": "73.51"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "27.813000000000002",
+        "Latitude": "-4.02",
+        "Longitude": "-40.98"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "15.835",
+        "Latitude": "29.74",
+        "Longitude": "31.38"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "14.136",
+        "Latitude": "23.31",
+        "Longitude": "112.72"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "23.459",
+        "Latitude": "-18.48",
+        "Longitude": "30.42"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "-18.555",
+        "Latitude": "45.81",
+        "Longitude": "125.77"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "26.722",
+        "Latitude": "10.45",
+        "Longitude": "107.18"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "23.185",
+        "Latitude": "16.87",
+        "Longitude": "78.70"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "28.597",
+        "Latitude": "7.23",
+        "Longitude": "4.05"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "6.212000000000001",
+        "Latitude": "40.99",
+        "Longitude": "29.82"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "11.856",
+        "Latitude": "37.78",
+        "Longitude": "26.44"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "16.008",
+        "Latitude": "26.52",
+        "Longitude": "75.22"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "26.787000000000006",
+        "Latitude": "-5.63",
+        "Longitude": "106.55"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "25.085",
+        "Latitude": "21.70",
+        "Longitude": "38.94"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "-1.253",
+        "Latitude": "36.17",
+        "Longitude": "117.35"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "5.165",
+        "Latitude": "34.56",
+        "Longitude": "70.05"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "23.476999999999997",
+        "Latitude": "12.05",
+        "Longitude": "8.22"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "13.147",
+        "Latitude": "26.52",
+        "Longitude": "80.60"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "19.554",
+        "Latitude": "24.92",
+        "Longitude": "67.39"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "-9.968",
+        "Latitude": "50.63",
+        "Longitude": "31.69"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "25.605",
+        "Latitude": "-4.02",
+        "Longitude": "15.27"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "27.83",
+        "Latitude": "5.63",
+        "Longitude": "3.23"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "11.81",
+        "Latitude": "31.35",
+        "Longitude": "73.51"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "13.147",
+        "Latitude": "26.52",
+        "Longitude": "80.60"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "20.45",
+        "Latitude": "-12.05",
+        "Longitude": "-77.26"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "1.381",
+        "Latitude": "52.24",
+        "Longitude": "-0.00"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "10.09",
+        "Latitude": "34.56",
+        "Longitude": "-118.70"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "26.011999999999997",
+        "Latitude": "-8.84",
+        "Longitude": "13.78"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "25.354",
+        "Latitude": "13.66",
+        "Longitude": "80.09"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "3.443",
+        "Latitude": "40.99",
+        "Longitude": "-4.26"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "25.454",
+        "Latitude": "15.27",
+        "Longitude": "120.83"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "4.746",
+        "Latitude": "36.17",
+        "Longitude": "59.67"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "20.016",
+        "Latitude": "-37.78",
+        "Longitude": "144.41"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "11.607000000000001",
+        "Latitude": "20.09",
+        "Longitude": "-98.96"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "27.520000000000003",
+        "Latitude": "2.41",
+        "Longitude": "45.80"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "-7.6110000000000015",
+        "Latitude": "45.81",
+        "Longitude": "-72.69"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "-15.845999999999998",
+        "Latitude": "55.45",
+        "Longitude": "36.85"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "4.745",
+        "Latitude": "34.56",
+        "Longitude": "136.22"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "18.679000000000002",
+        "Latitude": "21.70",
+        "Longitude": "78.75"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "17.476",
+        "Latitude": "-0.80",
+        "Longitude": "36.16"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "4.206",
+        "Latitude": "31.35",
+        "Longitude": "118.74"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "14.014000000000001",
+        "Latitude": "28.13",
+        "Longitude": "77.27"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "-2.359",
+        "Latitude": "40.99",
+        "Longitude": "-74.56"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "0.524",
+        "Latitude": "49.03",
+        "Longitude": "2.45"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "-5.3050000000000015",
+        "Latitude": "39.38",
+        "Longitude": "116.53"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "21.5",
+        "Latitude": "18.48",
+        "Longitude": "74.37"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "26.294",
+        "Latitude": "16.87",
+        "Longitude": "95.44"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "27.877",
+        "Latitude": "-23.31",
+        "Longitude": "-42.82"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "16.055",
+        "Latitude": "24.92",
+        "Longitude": "46.11"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "3.057",
+        "Latitude": "42.59",
+        "Longitude": "13.09"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "23.738000000000003",
+        "Latitude": "-23.31",
+        "Longitude": "-46.31"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "-13.436",
+        "Latitude": "60.27",
+        "Longitude": "29.19"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "27.465999999999998",
+        "Latitude": "-13.66",
+        "Longitude": "-38.81"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "13.788",
+        "Latitude": "-32.95",
+        "Longitude": "-69.89"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "25.243",
+        "Latitude": "18.48",
+        "Longitude": "-69.30"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "-4.935",
+        "Latitude": "37.78",
+        "Longitude": "126.10"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "4.635",
+        "Latitude": "31.35",
+        "Longitude": "120.63"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "-11.584000000000001",
+        "Latitude": "40.99",
+        "Longitude": "123.55"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "27.064",
+        "Latitude": "0.80",
+        "Longitude": "103.66"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "26.861",
+        "Latitude": "-7.23",
+        "Longitude": "112.70"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "21.461",
+        "Latitude": "21.70",
+        "Longitude": "73.56"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "21.124",
+        "Latitude": "-34.56",
+        "Longitude": "151.78"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "17.694999999999997",
+        "Latitude": "24.92",
+        "Longitude": "122.36"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "-6.5139999999999985",
+        "Latitude": "37.78",
+        "Longitude": "111.86"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "-3.06",
+        "Latitude": "37.78",
+        "Longitude": "113.90"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "-5.3050000000000015",
+        "Latitude": "39.38",
+        "Longitude": "116.53"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "2.608",
+        "Latitude": "36.17",
+        "Longitude": "139.23"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "-7.1370000000000005",
+        "Latitude": "44.20",
+        "Longitude": "-80.50"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "25.325",
+        "Latitude": "15.27",
+        "Longitude": "32.50"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "5.478",
+        "Latitude": "29.74",
+        "Longitude": "114.46"
+    },
+    {
+        "dt": "2010-01-01",
+        "AverageTemperature": "-0.2369999999999997",
+        "Latitude": "34.56",
+        "Longitude": "108.97"
+    }
+]
