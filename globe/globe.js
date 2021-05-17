@@ -461,14 +461,16 @@ DAT.Globe = function(container, opts) {
 
     // Compute Atmosphere Color
     var atmosphereColor = new THREE.Color(1, 1, 1);
+    const precisionTemperature = 10;
     for (const [key, value] of mapTemperature)
     {
-      if (Math.abs(coordinatesCamera[0] - key.latitude) < precision && Math.abs(coordinatesCamera[1] - key.longitude) < precision)
+      if (Math.abs(coordinatesCamera[0] - key.latitude) < precisionTemperature && Math.abs(coordinatesCamera[1] - key.longitude) < precisionTemperature)
       {
         atmosphereColor = new THREE.Color(value);
         break;
       }
     }
+
     materialAtmo.uniforms.color.value = atmosphereColor;
     materialEarth.uniforms.colorAtmosphere.value = atmosphereColor;
 
@@ -500,6 +502,8 @@ DAT.Globe = function(container, opts) {
 
       mapClaim.set(claim.country, [...arrayClaims, message]);
     }
+
+    console.log(point)
   }
 
   function getRandomClaimMessage(country)
