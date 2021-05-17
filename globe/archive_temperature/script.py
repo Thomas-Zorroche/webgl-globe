@@ -3,9 +3,6 @@
 import csv 
 import json
 
-# df = pd.read_csv(r'C:\wamp64\www\webgl-globe\globe\archive_temperature\GlobalLandTemperaturesByMajorCity.csv')
-# df.to_json(r'./GlobalLandTemperatureByMajorCit.json')
-
 def csv_to_json(csvFilePath, jsonFilePath):
     jsonArray = []
       
@@ -20,33 +17,33 @@ def csv_to_json(csvFilePath, jsonFilePath):
             jsonArray.append(row)
 
     # Remove unnecessary lines
+    jsonResult = []
+    compteur = 0
     for element in jsonArray:
-      element.pop('AverageTemperatureUncertainty', None)
-      element.pop('City', None)
-      element.pop('Country', None)
+        compteur+=1
+        if (compteur % 10000 == 0): print((compteur*100) / len(jsonArray))
 
-    # Convert N / S Latitude into + / -
-    # Convert E / W Longitude into + / -
-    kickout = 0
-    for i in range(len(jsonArray)):
-      if (i % 10000 == 0): print(i / (len(jsonArray) + kickout))
+        if element["dt"] != "2010-01-01":
+            continue
 
-      if jsonArray[i - kickout]["dt"] != "2010-01-01":
-        jsonArray.pop(i - kickout)
-        kickout+=1
-        continue
+        element.pop('AverageTemperatureUncertainty', None)
+        element.pop('City', None)
+        element.pop('Country', None)      
 
-      if 'S' in jsonArray[i - kickout]["Latitude"]:
-        jsonArray[i - kickout]["Latitude"] = "-" + jsonArray[i - kickout]["Latitude"]
-      if 'W' in jsonArray[i - kickout]["Longitude"]:
-        jsonArray[i - kickout]["Longitude"] = "-" + jsonArray[i - kickout]["Longitude"]
-      # remove letter
-      jsonArray[i - kickout]["Latitude"] = jsonArray[i - kickout]["Latitude"][:-1]
-      jsonArray[i - kickout]["Longitude"] = jsonArray[i - kickout]["Longitude"][:-1]
+        if 'S' in element["Latitude"]:
+            element["Latitude"] = "-" + element["Latitude"]
+        if 'W' in element["Longitude"]:
+            element["Longitude"] = "-" + element["Longitude"]
+        # remove letter
+        element["Latitude"] = element["Latitude"][:-1]
+        element["Longitude"] = element["Longitude"][:-1]
+
+        # add element to jsonResult
+        jsonResult.append(element)
       
     #convert python jsonArray to JSON String and write to file
     with open(jsonFilePath, 'w', encoding='utf-8') as jsonf: 
-        jsonString = json.dumps(jsonArray, indent=4)
+        jsonString = json.dumps(jsonResult, indent=4)
         jsonf.write(jsonString)
 
 

@@ -64,15 +64,23 @@
         padding: 10px;
       }
 
-      #City {
+      #Country {
+        color: rgb(25, 0, 255);
+        font: 24px Georgia;
+      }
+
+      #Claim {
+        color: red;
+        font: 18px Georgia;
+      }
+
+      .Claim-container {
         position: absolute;
-        top: 20px;
-        width: 270px;
-        left: 450px;
-        background-color: rgba(0,0,0,0.2);
-        border-radius: 3px;
-        font: 20px Georgia;
-        padding: 10px;
+        display: flex;
+        background-color: white;
+
+        bottom: 20px;
+        left: 20px;
       }
 
       .year {
@@ -128,7 +136,9 @@
     Climato Scepticisme et Sciences à travers le monde
   </div>
 
-  <div id="City">
+  <div class="Claim-container">
+    <div id="Country"></div>
+    <div id="Claim"></div>
   </div>
 
   <a id="ce" href="http://www.chromeexperiments.com/globe">
@@ -175,11 +185,9 @@
       var xhr;
       TWEEN.start();
       
-
+      // Temperature Dataset
       xhr = new XMLHttpRequest();
-      // xhr.open('GET', 'population909500.json', true);
-      //xhr.open('GET', 'claim.json', true);
-      xhr.open('GET', './archive_temperature/GlobalLandTemperaturesByMajorCity.json', true);
+      xhr.open('GET', './archive_temperature/GlobalLandTemperaturesByCity.json', true);
       xhr.onreadystatechange = function(e) {
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {
@@ -194,6 +202,21 @@
         }
       };
       xhr.send(null);
+
+      // Claims Dataset
+      xhr_claim = new XMLHttpRequest();
+      xhr_claim.open('GET', 'claim.json', true);
+      xhr_claim.onreadystatechange = function(e) {
+        if (xhr_claim.readyState === 4) {
+          if (xhr_claim.status === 200) {
+            var data_claim = JSON.parse(xhr_claim.responseText);
+            globe.initClaims(data_claim.claim);
+          }
+        }
+      };
+      xhr_claim.send(null);
+
+
     }
 
   </script>

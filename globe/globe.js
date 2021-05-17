@@ -85,6 +85,12 @@ DAT.Globe = function(container, opts) {
   var padding = 40;
   var PI_HALF = Math.PI / 2;
 
+  // Dataset variables
+  var mapCountry = new Map(); // [ Country , [ latitude, longitude ] ]
+  var mapClaim = new Map();   // [ Country, [...claims] ]
+  var currentClaimText = "";
+  var currentCountry = "";
+
   function init() {
 
     container.style.color = '#fff';
@@ -165,10 +171,6 @@ DAT.Globe = function(container, opts) {
     }, false);
   }
 
-  function lerp (start, end, t) {
-    return start * (1 - t) + end * t;
-  }
-
     /* accepts parameters
   * h  Object = {h:x, s:y, v:z}
   * OR 
@@ -224,7 +226,7 @@ DAT.Globe = function(container, opts) {
         for (i = 0; i < data.length; i++) {
           let tempRate = ((parseInt(data[i].AverageTemperature) + 20) / 60.0)
           let hue = coldTemperatureHue - (tempRate * (coldTemperatureHue - warmTemperatureHue));
-          addPoint(data[i].Latitude, data[i].Longitude, 50 * tempRate, HSVtoRGB(hue / 360, 1, 1), this._baseGeometry);
+          addPoint(data[i].Latitude, data[i].Longitude, 0, HSVtoRGB(hue / 360, 1, 1), this._baseGeometry);
         }
       }
       if(this._morphTargetId === undefined) {
@@ -240,7 +242,7 @@ DAT.Globe = function(container, opts) {
       // 0 : cold --> 1 : warm
       let tempRate = ((parseInt(data[i].AverageTemperature) + 20) / 60.0)
       let hue = coldTemperatureHue - (tempRate * (coldTemperatureHue - warmTemperatureHue));
-      addPoint(data[i].Latitude, data[i].Longitude, 50 * tempRate, HSVtoRGB(hue / 360, 1, 1), subgeo);
+      addPoint(data[i].Latitude, data[i].Longitude, 0, HSVtoRGB(hue / 360, 1, 1), subgeo);
     }
 
     if (opts.animated) {
@@ -261,11 +263,8 @@ DAT.Globe = function(container, opts) {
             }));
       } else {
         if (this._baseGeometry.morphTargets.length < 8) {
-          console.log('t l',this._baseGeometry.morphTargets.length);
           var padding = 8-this._baseGeometry.morphTargets.length;
-          console.log('padding', padding);
           for(var i=0; i<=padding; i++) {
-            console.log('padding',i);
             this._baseGeometry.morphTargets.push({'name': 'morphPadding'+i, vertices: this._baseGeometry.vertices});
           }
         }
@@ -291,6 +290,8 @@ DAT.Globe = function(container, opts) {
     point.lookAt(mesh.position);
 
     point.scale.z = Math.max( size, 0.1 ); // avoid non-invertible matrix
+    point.scale.x = 3;
+    point.scale.y = 3;
     point.updateMatrix();
 
     for (var i = 0; i < point.geometry.faces.length; i++) {
@@ -408,31 +409,38 @@ DAT.Globe = function(container, opts) {
   }
 
   function render() {
-
     
     zoom(curZoomSpeed);
 
     const coordinatesCamera = getLatitudeAndLongitude();
-    const coordinatesCity = [
-      [  40.6643,  73.9385, "New-York", "NY message ici .... " ],
-      [  35.6894,  139.692, "Tokyo", "Tokyo message ici .... " ], 
-      [  37.9816,  23.7308, "Athènes", "Athènes message ici .... " ], 
-      [ -33.9258,  18.4232,  "Le Cap", "Le Cap message ici .... " ]
-    ];
     const precision = 5;
 
-    let cityFound = false;
-    coordinatesCity.forEach(city => {
-        if (Math.abs(coordinatesCamera[0] - city[0]) < 5 && Math.abs(coordinatesCamera[1] - city[1]) < 5)
-        {
-          document.getElementById("City").innerHTML = city[2];
-          cityFound = true;
+    let countryFound = false;
+    for (const [key, value] of mapCountry)
+    {
+      if (Math.abs(coordinatesCamera[0] - value.latitude) < precision && Math.abs(coordinatesCamera[1] - value.longitude) < precision)
+      {
+        document.getElementById("Country").innerHTML = key;
+        
+        if (currentClaimText == "" || key != currentCountry) {
+          currentClaimText = getRandomClaimMessage(key);
+          currentCountry = key;
         }
-        else if (!cityFound)
-        {
-          document.getElementById("City").innerHTML = "";
-        }
-    });
+
+        document.getElementById("Claim").innerHTML = currentClaimText;
+        countryFound = true;
+        break;
+      }
+
+    }
+
+    if (!countryFound)
+    {
+      document.getElementById("Country").innerHTML = "";
+      currentClaimText = "";
+      document.getElementById("Claim").innerHTML = currentClaimText;
+    }
+
     
     rotation.x += (target.x - rotation.x) * 0.1;
     rotation.y += (target.y - rotation.y) * 0.1;
@@ -445,6 +453,30 @@ DAT.Globe = function(container, opts) {
     camera.lookAt(mesh.position);
 
     renderer.render(scene, camera);
+  }
+
+  function initClaims(data)
+  {
+    for (const claim of data)
+    {
+      // Map Countries
+      const latitude = claim.latitude;
+      const longitude = claim.longitude;
+      mapCountry.set(claim.country, {latitude, longitude});
+
+      // Map Claims
+      const message = claim.text;
+      const arrayClaims = mapClaim.get(claim.country) || [];
+
+      mapClaim.set(claim.country, [...arrayClaims, message]);
+    }
+  }
+
+  function getRandomClaimMessage(country)
+  {
+    const claimsFromCountry = mapClaim.get(country);
+    const randomClaim = claimsFromCountry[Math.floor(Math.random() * claimsFromCountry.length)];
+    return randomClaim;
   }
 
   init();
@@ -480,6 +512,7 @@ DAT.Globe = function(container, opts) {
   });
 
   this.addData = addData;
+  this.initClaims = initClaims;
   this.createPoints = createPoints;
   this.renderer = renderer;
   this.scene = scene;
@@ -487,4 +520,6 @@ DAT.Globe = function(container, opts) {
   return this;
 
 };
+
+
 
