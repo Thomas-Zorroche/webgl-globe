@@ -26,7 +26,8 @@ DAT.Globe = function(container, opts) {
   var Shaders = {
     'earth' : {
       uniforms: {
-        'texture': { type: 't', value: null }
+        'texture': { type: 't', value: null },
+        'colorAtmosphere': { type: "c", value: "new THREE.Color(0xaeeb34)" }
       },
       vertexShader: [
         'varying vec3 vNormal;',
@@ -41,16 +42,19 @@ DAT.Globe = function(container, opts) {
         'uniform sampler2D texture;',
         'varying vec3 vNormal;',
         'varying vec2 vUv;',
+        'uniform vec3 colorAtmosphere;',
         'void main() {',
           'vec3 diffuse = texture2D( texture, vUv ).xyz;',
           'float intensity = 1.05 - dot( vNormal, vec3( 0.0, 0.0, 1.0 ) );',
-          'vec3 atmosphere = vec3( 0.2, 0.8, 0.2) * pow( intensity, 3.0 );',
+          'vec3 atmosphere = colorAtmosphere * pow( intensity, 3.0 );',
           'gl_FragColor = vec4( diffuse + atmosphere, 1.0 );',
         '}'
       ].join('\n')
     },
     'atmosphere' : {
-      uniforms: {},
+      uniforms: {
+        'color': { type: "c", value: "new THREE.Color(0xaeeb34)" }
+      },
       vertexShader: [
         'varying vec3 vNormal;',
         'void main() {',
@@ -60,9 +64,10 @@ DAT.Globe = function(container, opts) {
       ].join('\n'),
       fragmentShader: [
         'varying vec3 vNormal;',
+        'uniform vec3 color;',
         'void main() {',
           'float intensity = pow( 0.8 - dot( vNormal, vec3( 0, 0, 1.0 ) ), 12.0 ) * 0.5;',
-          'gl_FragColor = vec4( 0.9, 0.8, 0.2, 1.0 ) * intensity;',
+          'gl_FragColor = vec4( color, 1.0 ) * intensity;',
         '}'
       ].join('\n')
     }
@@ -70,6 +75,7 @@ DAT.Globe = function(container, opts) {
 
   var camera, scene, renderer, w, h;
   var mesh, atmosphere, point;
+  var materialAtmo, materialEarth;
 
   var overRenderer;
 
@@ -86,8 +92,10 @@ DAT.Globe = function(container, opts) {
   var PI_HALF = Math.PI / 2;
 
   // Dataset variables
-  var mapCountry = new Map(); // [ Country , [ latitude, longitude ] ]
-  var mapClaim = new Map();   // [ Country, [...claims] ]
+  var mapCountry = new Map();     // [ Country , [ latitude, longitude ] ]
+  var mapClaim = new Map();       // [ Country, [...claims] ]
+  var mapTemperature = new Map(); // [ [ latitude, longitude ], color ]
+
   var currentClaimText = "";
   var currentCountry = "";
 
@@ -96,7 +104,7 @@ DAT.Globe = function(container, opts) {
     container.style.color = '#fff';
     container.style.font = '13px/20px Arial, sans-serif';
 
-    var shader, uniforms, material;
+    var shader, uniformsh;
     w = container.offsetWidth || window.innerWidth;
     h = container.offsetHeight || window.innerHeight;
 
@@ -112,7 +120,7 @@ DAT.Globe = function(container, opts) {
 
     uniforms['texture'].value = THREE.ImageUtils.loadTexture('world.jpg');
 
-    material = new THREE.ShaderMaterial({
+    materialEarth = new THREE.ShaderMaterial({
 
           uniforms: uniforms,
           vertexShader: shader.vertexShader,
@@ -120,14 +128,14 @@ DAT.Globe = function(container, opts) {
 
         });
 
-    mesh = new THREE.Mesh(geometry, material);
+    mesh = new THREE.Mesh(geometry, materialEarth);
     mesh.rotation.y = Math.PI;
     scene.add(mesh);
 
     shader = Shaders['atmosphere'];
     uniforms = THREE.UniformsUtils.clone(shader.uniforms);
 
-    material = new THREE.ShaderMaterial({
+    materialAtmo = new THREE.ShaderMaterial({
 
           uniforms: uniforms,
           vertexShader: shader.vertexShader,
@@ -138,7 +146,7 @@ DAT.Globe = function(container, opts) {
 
         });
 
-    mesh = new THREE.Mesh(geometry, material);
+    mesh = new THREE.Mesh(geometry, materialAtmo);
     mesh.scale.set( 1.1, 1.1, 1.1 );
     scene.add(mesh);
 
@@ -207,6 +215,7 @@ DAT.Globe = function(container, opts) {
     const coldTemperatureHue = 240;
     const warmTemperatureHue = 0;
 
+
     opts.animated = opts.animated || false;
     this.is_animated = opts.animated;
     opts.format = opts.format || 'magnitude'; // other option is 'legend'
@@ -238,12 +247,21 @@ DAT.Globe = function(container, opts) {
     }
     var subgeo = new THREE.Geometry();
 
+    mapTemperature.clear();
     for (i = 0; i < data.length; i++) {
       // 0 : cold --> 1 : warm
       let tempRate = ((parseInt(data[i].AverageTemperature) + 20) / 60.0)
       let hue = coldTemperatureHue - (tempRate * (coldTemperatureHue - warmTemperatureHue));
       addPoint(data[i].Latitude, data[i].Longitude, 0, HSVtoRGB(hue / 360, 1, 1), subgeo);
+      
+      // copy temperature in array
+      const latitude = data[i].Latitude;
+      const longitude = data[i].Longitude;
+      const hsv = HSVtoRGB(hue / 360, 1, 1);
+      mapTemperature.set({latitude, longitude}, new THREE.Color(hsv.r, hsv.g, hsv.b))
     }
+
+    console.log(mapTemperature)
 
     if (opts.animated) {
       this._baseGeometry.morphTargets.push({'name': opts.name, vertices: subgeo.vertices});
@@ -415,6 +433,7 @@ DAT.Globe = function(container, opts) {
     const coordinatesCamera = getLatitudeAndLongitude();
     const precision = 5;
 
+    // Retrieve Country in focus
     let countryFound = false;
     for (const [key, value] of mapCountry)
     {
@@ -431,7 +450,6 @@ DAT.Globe = function(container, opts) {
         countryFound = true;
         break;
       }
-
     }
 
     if (!countryFound)
@@ -441,7 +459,19 @@ DAT.Globe = function(container, opts) {
       document.getElementById("Claim").innerHTML = currentClaimText;
     }
 
-    
+    // Compute Atmosphere Color
+    var atmosphereColor = new THREE.Color(1, 1, 1);
+    for (const [key, value] of mapTemperature)
+    {
+      if (Math.abs(coordinatesCamera[0] - key.latitude) < precision && Math.abs(coordinatesCamera[1] - key.longitude) < precision)
+      {
+        atmosphereColor = new THREE.Color(value);
+        break;
+      }
+    }
+    materialAtmo.uniforms.color.value = atmosphereColor;
+    materialEarth.uniforms.colorAtmosphere.value = atmosphereColor;
+
     rotation.x += (target.x - rotation.x) * 0.1;
     rotation.y += (target.y - rotation.y) * 0.1;
     distance += (distanceTarget - distance) * 0.3;
