@@ -96,10 +96,13 @@ DAT.Globe = function(container, opts) {
   var mapClaim = new Map();       // [ Country, [...claims] ]
   var mapTemperature = new Map(); // [ [ latitude, longitude ], color ]
 
-  var currentClaimText = "";
-  var currentCountry = "";
-
+  var currentClaimTexts = new Array();
+  var currentCountries = new Array();
+  var maxClaimCount = 3;
   var needUpdate = true;
+
+  var MouseX = 0;
+  var MouseY = 0;
 
   function init() {
 
@@ -263,8 +266,6 @@ DAT.Globe = function(container, opts) {
       mapTemperature.set({latitude, longitude}, new THREE.Color(hsv.r, hsv.g, hsv.b))
     }
 
-    console.log(mapTemperature)
-
     if (opts.animated) {
       this._baseGeometry.morphTargets.push({'name': opts.name, vertices: subgeo.vertices});
     } else {
@@ -354,6 +355,8 @@ DAT.Globe = function(container, opts) {
     target.y = target.y < - PI_HALF ? - PI_HALF : target.y;
 
     needUpdate = true;
+    MouseX = event.clientX;
+    MouseY = event.clientY;
   }
 
   function onMouseUp(event) {
@@ -436,34 +439,33 @@ DAT.Globe = function(container, opts) {
 
     if (needUpdate)
     {
-      console.log("UPDATE")
-
       const coordinatesCamera = getLatitudeAndLongitude();
       
       // Retrieve Country in focus
-      let countryFound = false;
-      const precision = 5;
+      const precision = 10;
+      let claimCount = 0;
       for (const [key, value] of mapCountry)
       {
+        if (claimCount >= maxClaimCount) break;
+
+        // If a country is in focus
         if (Math.abs(coordinatesCamera[0] - value.latitude) < precision && Math.abs(coordinatesCamera[1] - value.longitude) < precision)
         {
-          document.getElementById("Country").innerHTML = key;
-          
-          if (currentClaimText == "" || key != currentCountry) {
-            currentClaimText = getRandomClaimMessage(key);
-            currentCountry = key;
+          // If array of claims is empty or the country is not in the array, generate a new random claim
+          if (currentClaimTexts.length == 0 || !isCountryInFocus(key)) {
+            let country = key;
+            let message = getRandomClaimMessage(country);
+            currentCountries.push(country);
+            currentClaimTexts.push(message);
+            createClaim(country, message);
+
+            // If there are more claims than the limit, delete the first one
+            if (currentCountries.length > maxClaimCount) {
+              deleteFirstClaim();
+            }
           }
-  
-          document.getElementById("Claim").innerHTML = currentClaimText;
-          countryFound = true;
-          break;
+          claimCount++;
         }
-      }
-      if (!countryFound)
-      {
-        document.getElementById("Country").innerHTML = "";
-        currentClaimText = "";
-        document.getElementById("Claim").innerHTML = currentClaimText;
       }
   
       // Compute Atmosphere Color
@@ -513,7 +515,6 @@ DAT.Globe = function(container, opts) {
       mapClaim.set(claim.country, [...arrayClaims, message]);
     }
 
-    console.log(point)
   }
 
   function getRandomClaimMessage(country)
@@ -523,9 +524,51 @@ DAT.Globe = function(container, opts) {
     return randomClaim;
   }
 
+  function createClaim(country, messsage)
+  {
+    const container = document.getElementById("Claim-Container");
+
+    const divCountry = document.createElement("div");
+    divCountry.className = "claim-country";
+    divCountry.innerHTML = country;
+
+    const divMessage = document.createElement("div");
+    divMessage.className = "claim-text";
+    divMessage.innerHTML = messsage;
+
+    const divClaim = document.createElement("div");
+    divClaim.className = "claim";
+
+    let top = Math.floor(Math.random() * 600) + 50; // returns a random integer from 50 to 600
+    let left;
+    do {
+      left = Math.floor(Math.random() * 1500) + 50; // returns a random integer from 50 to 1600
+    } while (left > 350 && left < 1300);
+
+    divClaim.style.top = top + "px";
+    divClaim.style.left = left + "px";
+    divClaim.appendChild(divCountry);
+    divClaim.appendChild(divMessage);
+
+    container.appendChild(divClaim);
+  }
+
+  function deleteFirstClaim()
+  {
+    const container = document.getElementById("Claim-Container");
+    container.removeChild(container.children[0]);
+  }
+
+  function isCountryInFocus(country)
+  {
+    for (c of currentCountries) {
+      if (country === c) return true;
+    }
+    return false;
+  }
+
   init();
   this.animate = animate;
-
 
   this.__defineGetter__('time', function() {
     return this._time || 0;

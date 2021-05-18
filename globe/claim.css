@@ -1,0 +1,26 @@
+#Claim-Container {
+  z-index: 10;
+}
+
+.claim {
+  position: absolute;
+  display: flex;
+  background-color: white;
+
+  top: 0px;
+  left: 0px;
+
+  width: 300px;
+  border-radius: 10px;
+  padding: 5px;
+}
+
+.claim-country {
+  color: rgb(25, 0, 255);
+  font: 20px Georgia;
+}
+
+.claim-text {
+  color: rgb(255, 123, 0);
+  font: 11px Georgia;
+}
