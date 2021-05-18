@@ -99,6 +99,8 @@ DAT.Globe = function(container, opts) {
   var currentClaimText = "";
   var currentCountry = "";
 
+  var needUpdate = true;
+
   function init() {
 
     container.style.color = '#fff';
@@ -350,6 +352,8 @@ DAT.Globe = function(container, opts) {
 
     target.y = target.y > PI_HALF ? PI_HALF : target.y;
     target.y = target.y < - PI_HALF ? - PI_HALF : target.y;
+
+    needUpdate = true;
   }
 
   function onMouseUp(event) {
@@ -430,49 +434,55 @@ DAT.Globe = function(container, opts) {
     
     zoom(curZoomSpeed);
 
-    const coordinatesCamera = getLatitudeAndLongitude();
-    const precision = 5;
-
-    // Retrieve Country in focus
-    let countryFound = false;
-    for (const [key, value] of mapCountry)
+    if (needUpdate)
     {
-      if (Math.abs(coordinatesCamera[0] - value.latitude) < precision && Math.abs(coordinatesCamera[1] - value.longitude) < precision)
+      console.log("UPDATE")
+
+      const coordinatesCamera = getLatitudeAndLongitude();
+      
+      // Retrieve Country in focus
+      let countryFound = false;
+      const precision = 5;
+      for (const [key, value] of mapCountry)
       {
-        document.getElementById("Country").innerHTML = key;
-        
-        if (currentClaimText == "" || key != currentCountry) {
-          currentClaimText = getRandomClaimMessage(key);
-          currentCountry = key;
+        if (Math.abs(coordinatesCamera[0] - value.latitude) < precision && Math.abs(coordinatesCamera[1] - value.longitude) < precision)
+        {
+          document.getElementById("Country").innerHTML = key;
+          
+          if (currentClaimText == "" || key != currentCountry) {
+            currentClaimText = getRandomClaimMessage(key);
+            currentCountry = key;
+          }
+  
+          document.getElementById("Claim").innerHTML = currentClaimText;
+          countryFound = true;
+          break;
         }
-
-        document.getElementById("Claim").innerHTML = currentClaimText;
-        countryFound = true;
-        break;
       }
-    }
-
-    if (!countryFound)
-    {
-      document.getElementById("Country").innerHTML = "";
-      currentClaimText = "";
-      document.getElementById("Claim").innerHTML = currentClaimText;
-    }
-
-    // Compute Atmosphere Color
-    var atmosphereColor = new THREE.Color(1, 1, 1);
-    const precisionTemperature = 10;
-    for (const [key, value] of mapTemperature)
-    {
-      if (Math.abs(coordinatesCamera[0] - key.latitude) < precisionTemperature && Math.abs(coordinatesCamera[1] - key.longitude) < precisionTemperature)
+      if (!countryFound)
       {
-        atmosphereColor = new THREE.Color(value);
-        break;
+        document.getElementById("Country").innerHTML = "";
+        currentClaimText = "";
+        document.getElementById("Claim").innerHTML = currentClaimText;
       }
-    }
+  
+      // Compute Atmosphere Color
+      var atmosphereColor = new THREE.Color(1, 1, 1);
+      const precisionTemperature = 10;
+      for (const [key, value] of mapTemperature)
+      {
+        if (Math.abs(coordinatesCamera[0] - key.latitude) < precisionTemperature && Math.abs(coordinatesCamera[1] - key.longitude) < precisionTemperature)
+        {
+          atmosphereColor = new THREE.Color(value);
+          break;
+        }
+      }
+  
+      materialAtmo.uniforms.color.value = atmosphereColor;
+      materialEarth.uniforms.colorAtmosphere.value = atmosphereColor;
 
-    materialAtmo.uniforms.color.value = atmosphereColor;
-    materialEarth.uniforms.colorAtmosphere.value = atmosphereColor;
+      needUpdate = false;
+    }
 
     rotation.x += (target.x - rotation.x) * 0.1;
     rotation.y += (target.y - rotation.y) * 0.1;
