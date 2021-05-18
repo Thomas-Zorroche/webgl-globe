@@ -439,41 +439,29 @@ DAT.Globe = function(container, opts) {
 
     if (needUpdate)
     {
-      const coordinatesCamera = getLatitudeAndLongitude();
-      
-      // Retrieve Country in focus
-      const precision = 10;
-      let claimCount = 0;
+      // Get countries in focus
       for (const [key, value] of mapCountry)
       {
-        if (claimCount >= maxClaimCount) break;
-
-        // If a country is in focus
-        if (Math.abs(coordinatesCamera[0] - value.latitude) < precision && Math.abs(coordinatesCamera[1] - value.longitude) < precision)
-        {
-          // If array of claims is empty or the country is not in the array, generate a new random claim
-          if (currentClaimTexts.length == 0 || !isCountryInFocus(key)) {
+        // If a country is in focus, and its claim is not already on screen, and that totalClaims < maxClaimCount
+        if (isPointInsideCameraView(value.latitude, value.longitude, 10)) {
+          if (currentCountries.length < maxClaimCount && isCountryClaimOnScreen(key) == -1) {
             let country = key;
             let message = getRandomClaimMessage(country);
             currentCountries.push(country);
-            currentClaimTexts.push(message);
             createClaim(country, message);
-
-            // If there are more claims than the limit, delete the first one
-            if (currentCountries.length > maxClaimCount) {
-              deleteFirstClaim();
-            }
           }
-          claimCount++;
+        }
+        // If a country is not in focus but still have it claim on screen, delete it
+        else if (isCountryClaimOnScreen(key) != -1) {
+          deleteClaim(key, isCountryClaimOnScreen(key));
         }
       }
   
       // Compute Atmosphere Color
       var atmosphereColor = new THREE.Color(1, 1, 1);
-      const precisionTemperature = 10;
       for (const [key, value] of mapTemperature)
       {
-        if (Math.abs(coordinatesCamera[0] - key.latitude) < precisionTemperature && Math.abs(coordinatesCamera[1] - key.longitude) < precisionTemperature)
+        if (isPointInsideCameraView(key.latitude, key.longitude, 10))
         {
           atmosphereColor = new THREE.Color(value);
           break;
@@ -482,7 +470,6 @@ DAT.Globe = function(container, opts) {
   
       materialAtmo.uniforms.color.value = atmosphereColor;
       materialEarth.uniforms.colorAtmosphere.value = atmosphereColor;
-
       needUpdate = false;
     }
 
@@ -497,6 +484,12 @@ DAT.Globe = function(container, opts) {
     camera.lookAt(mesh.position);
 
     renderer.render(scene, camera);
+  }
+
+  function isPointInsideCameraView(latitude, longitude, precision)
+  {
+    const coordinatesCamera = getLatitudeAndLongitude();
+    return Math.abs(coordinatesCamera[0] - latitude) < precision && Math.abs(coordinatesCamera[1] - longitude) < precision;
   }
 
   function initClaims(data)
@@ -553,18 +546,31 @@ DAT.Globe = function(container, opts) {
     container.appendChild(divClaim);
   }
 
-  function deleteFirstClaim()
+  function deleteClaim(country, indexInArray)
   {
     const container = document.getElementById("Claim-Container");
-    container.removeChild(container.children[0]);
+    let index = 0;
+    for (child of container.children) {
+      if (child.getElementsByClassName("claim-country")[0].innerHTML === country) {
+        break;
+      }
+      index++;
+    }
+
+    if (index < container.children.length) {
+      container.removeChild(container.children[index]);
+      currentCountries.splice(indexInArray, 1);
+    }
   }
 
-  function isCountryInFocus(country)
+  function isCountryClaimOnScreen(country)
   {
-    for (c of currentCountries) {
-      if (country === c) return true;
+    let index = 0;
+    for (currentCountry of currentCountries) {
+      if (currentCountry === country) return index;
+      index++;
     }
-    return false;
+    return -1;
   }
 
   init();
