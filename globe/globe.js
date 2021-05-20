@@ -462,7 +462,7 @@ DAT.Globe = function(container, opts) {
   
       // Compute Atmosphere Color
       var atmosphereColor = new THREE.Color(1, 1, 1);
-      var temperatureFocus = 0
+      var temperatureFocus = -1
       var precisionTemperature = 5
       for (const [key, value] of mapTemperature)
       {
@@ -482,6 +482,16 @@ DAT.Globe = function(container, opts) {
       } else {
         document.getElementById("Diff-Temp").innerHTML = "+" + temperatureFocus + "°C"
         document.getElementById("Diff-Temp").style.color = "rgb(" + atmosphereColor.r * 255 + "," + atmosphereColor.g * 255 + "," + atmosphereColor.b * 255 + ")";
+      }
+
+      // Transfrom Scale
+      if (temperatureFocus !== -1) {
+        const indexScale = Math.floor( temperatureFocus );
+        var UlContainer = document.getElementById("Temp-Scale").getElementsByTagName("ul")[0];
+        for (let i = 0; i < UlContainer.children.length; i++) {
+          const scaleValue = 1 / (1 + Math.abs(indexScale - i));
+          UlContainer.children[i].style.transform = "scale(" + scaleValue + ")";
+        }
       }
   
       materialAtmo.uniforms.color.value = atmosphereColor;
@@ -602,10 +612,9 @@ DAT.Globe = function(container, opts) {
     for (let i = 0; i < 10; i++) {
       let liScale = document.createElement("li");
       liScale.className = "scales"
-      const color = HSVtoRGB((i * 36.0) / 360.0, 1, 1)
+      const color = HSVtoRGB((243.0 - (i * 27.0)) / 360.0, 1, 1)
       liScale.style.backgroundColor = "rgb(" + color.r * 255 + "," + color.g * 255 + "," + color.b * 255 + ")";
       containerUl.appendChild(liScale)
-      
     }
   }
 
