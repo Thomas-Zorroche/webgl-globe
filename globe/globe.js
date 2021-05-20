@@ -559,11 +559,15 @@ DAT.Globe = function(container, opts) {
     const divPP= document.createElement("span");
     divPP.className = "pp";
     divPP.innerHTML = "";
+    const spanFAKE = document.createElement("span");
+    spanFAKE.className = "fake";
+    spanFAKE.innerHTML = "FAKE NEWS";
 
     const divTitle = document.createElement("div");
     divTitle.className = "title"
     divTitle.appendChild(divPP)
     divTitle.appendChild(divCountry);
+    divTitle.appendChild(spanFAKE);
 
     const divMessage = document.createElement("div");
     divMessage.className = "claim-text";

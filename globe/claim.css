@@ -63,13 +63,21 @@
   margin-right: 10px;
 }
 
+.fake {
+  margin-left: auto;
+  color: rgb(212, 212, 212);
+  font-family: "Bebas";
+  font-size: 42px;
+  letter-spacing: 0.1rem;
+}
+
 /* TITLE */
 #title {
   position: absolute;
   top: 2vh;
   width: 100%;
   text-align: center;
-  font-family: "Bebas", Arial, "sans-serif";;
+  font-family: "Bebas", Arial, "sans-serif";
   font-size: 32px;
   letter-spacing: .2rem;
 }
