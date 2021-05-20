@@ -1,3 +1,17 @@
+/* --------- FONTS --------- */
+@font-face {
+  font-family: 'Helvetica';
+  font-style: normal;
+  font-weight: normal;
+  src: url('./fonts/Nimbus-Sans-D-OT-Light.ttf');
+}
+@font-face {
+  font-family: 'Bebas';
+  font-style: normal;
+  font-weight: normal;
+  src: url('./fonts/BebasNeue-Regular.ttf');
+}
+
 #Claim-Container {
   z-index: 10;
 }
@@ -18,13 +32,17 @@
 
 .claim-country {
   color: rgb(0, 0, 0);
-  font: 18px Georgia;
+  font-size: 20px;
+  font-family: "Helvetica";
   font-weight: bold;
 }
 
 .claim-text {
   color: rgb(39, 39, 39);
-  font: 12px Georgia;
+  font-size: 14px;
+  font-family: "Helvetica";
+  text-align: justify;
+  text-justify: inter-word;
 }
 
 .title {
@@ -33,7 +51,7 @@
   align-items: center;
   margin-bottom: 5px;
   padding-bottom: 5px;
-  border-bottom: 1px solid rgb(29, 29, 29);
+  border-bottom: 1px solid rgb(59, 59, 59);
 }
 
 .pp {
@@ -48,28 +66,32 @@
 /* TITLE */
 #title {
   position: absolute;
-  top: 1.5vh;
+  top: 2vh;
   width: 100%;
   text-align: center;
-  font: 24px Georgia;
+  font-family: "Bebas", Arial, "sans-serif";;
+  font-size: 32px;
+  letter-spacing: .2rem;
 }
 
 #Diff-Temp {
   position: absolute;
-  top: 5.5vh;
+  top: 7vh;
   width: 100%;
   text-align: center;
-  font: 30px Georgia;
+  font-family: "Bebas", Arial, "sans-serif";;
+  font-size: 48px;
 }
 
 /* SCALE TEMPERATURE */
 
 #Temp-Scale {
   position: absolute;
-  bottom: 1vh;
+  bottom: 0vh;
   width: 100%;
   text-align: center;
-  font: 18px Georgia;
+  font-size: 22px;
+  font-family: "Helvetica";
 }
 
 #Temp-Scale p {
