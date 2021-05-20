@@ -100,6 +100,11 @@ DAT.Globe = function(container, opts) {
   var maxClaimCount = 3;
   var needUpdate = true;
 
+  const coldTemperatureHue = 80;
+  const warmTemperatureHue = 0;
+  const maxValue = 9.44
+  const minValue = 0 
+
   function init() {
 
     initScale();
@@ -215,12 +220,7 @@ DAT.Globe = function(container, opts) {
   function addData(data, opts) {
     var i, step, colorFnWrapper;
 
-    const coldTemperatureHue = 240;
-    const warmTemperatureHue = 0;
-    // Temperature [-20, 30]
-    // Average [0.005, 9.44]
-    const maxValue = 9.44
-    const minValue = 0 // negative
+
 
     opts.animated = opts.animated || false;
     this.is_animated = opts.animated;
@@ -556,6 +556,14 @@ DAT.Globe = function(container, opts) {
     const divCountry = document.createElement("div");
     divCountry.className = "claim-country";
     divCountry.innerHTML = country;
+    const divPP= document.createElement("span");
+    divPP.className = "pp";
+    divPP.innerHTML = "";
+
+    const divTitle = document.createElement("div");
+    divTitle.className = "title"
+    divTitle.appendChild(divPP)
+    divTitle.appendChild(divCountry);
 
     const divMessage = document.createElement("div");
     divMessage.className = "claim-text";
@@ -572,7 +580,7 @@ DAT.Globe = function(container, opts) {
 
     divClaim.style.top = top + "px";
     divClaim.style.left = left + "px";
-    divClaim.appendChild(divCountry);
+    divClaim.appendChild(divTitle);
     divClaim.appendChild(divMessage);
 
     container.appendChild(divClaim);
@@ -608,11 +616,12 @@ DAT.Globe = function(container, opts) {
   function initScale()
   {
     const containerUl = document.getElementById("Temp-Scale").getElementsByTagName("ul")[0];
+    const step = coldTemperatureHue / 10.0
 
     for (let i = 0; i < 10; i++) {
       let liScale = document.createElement("li");
       liScale.className = "scales"
-      const color = HSVtoRGB((243.0 - (i * 27.0)) / 360.0, 1, 1)
+      const color = HSVtoRGB((coldTemperatureHue - (i * step)) / 360.0, 1, 1)
       liScale.style.backgroundColor = "rgb(" + color.r * 255 + "," + color.g * 255 + "," + color.b * 255 + ")";
       containerUl.appendChild(liScale)
     }

@@ -5,24 +5,44 @@
 .claim {
   position: absolute;
   display: flex;
+  flex-direction: column;
   background-color: white;
 
   top: 0px;
   left: 0px;
 
   width: 300px;
-  border-radius: 10px;
-  padding: 5px;
+  border-radius: 5px;
+  padding: 10px;
 }
 
 .claim-country {
-  color: rgb(25, 0, 255);
-  font: 20px Georgia;
+  color: rgb(0, 0, 0);
+  font: 18px Georgia;
+  font-weight: bold;
 }
 
 .claim-text {
-  color: rgb(255, 123, 0);
-  font: 11px Georgia;
+  color: rgb(39, 39, 39);
+  font: 12px Georgia;
+}
+
+.title {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 5px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid rgb(29, 29, 29);
+}
+
+.pp {
+  height: 32px;
+  width: 32px;
+  background-color: rgb(180, 41, 41);
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 10px;
 }
 
 /* TITLE */
@@ -69,5 +89,5 @@
   height: 4vh;
   margin: 0 20px 0 20px;
   border-radius: 2px;
-  background-color: brown;
+  background-color: rgb(255, 255, 255);
 }
