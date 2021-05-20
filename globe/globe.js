@@ -586,8 +586,9 @@ DAT.Globe = function(container, opts) {
     divClaim.style.left = left + "px";
     divClaim.appendChild(divTitle);
     divClaim.appendChild(divMessage);
-
-    container.appendChild(divClaim);
+    
+    container.appendChild(divClaim).focus();
+    divClaim.className += " focus"
   }
 
   function deleteClaim(country, indexInArray)
