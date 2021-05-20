@@ -19,12 +19,25 @@ def csv_to_json(csvFilePath, jsonFilePath):
     # Remove unnecessary lines
     jsonResult = []
     compteur = 0
+    temperature1910 = 0
+    min = 1000
+    max = 0
     for element in jsonArray:
         compteur+=1
         if (compteur % 10000 == 0): print((compteur*100) / len(jsonArray))
 
+        if element["dt"] == "1910-01-01":
+            temperature1910 = element["AverageTemperature"]
+            continue
+        
         if element["dt"] != "2010-01-01":
             continue
+
+        element["AverageTemperature"] = abs(float(element["AverageTemperature"]) - float(temperature1910))
+        if (element["AverageTemperature"] > max):
+            max = element["AverageTemperature"]
+        if (element["AverageTemperature"] < min):
+            min = element["AverageTemperature"]
 
         element.pop('AverageTemperatureUncertainty', None)
         element.pop('City', None)
@@ -40,6 +53,10 @@ def csv_to_json(csvFilePath, jsonFilePath):
 
         # add element to jsonResult
         jsonResult.append(element)
+
+    print(min)
+    print("\n")
+    print(max)
       
     #convert python jsonArray to JSON String and write to file
     with open(jsonFilePath, 'w', encoding='utf-8') as jsonf: 
@@ -48,6 +65,6 @@ def csv_to_json(csvFilePath, jsonFilePath):
 
 
 csvFilePath = r'C:\wamp64\www\webgl-globe\globe\archive_temperature\GlobalLandTemperaturesByCity.csv'
-jsonFilePath = r'C:\wamp64\www\webgl-globe\globe\archive_temperature\GlobalLandTemperaturesByCity.json'
+jsonFilePath = r'C:\wamp64\www\webgl-globe\globe\archive_temperature\GlobalLandTemperaturesByCity2.json'
 
 csv_to_json(csvFilePath, jsonFilePath)

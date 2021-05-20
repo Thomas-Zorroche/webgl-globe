@@ -24,3 +24,50 @@
   color: rgb(255, 123, 0);
   font: 11px Georgia;
 }
+
+/* TITLE */
+#title {
+  position: absolute;
+  top: 1.5vh;
+  width: 100%;
+  text-align: center;
+  font: 24px Georgia;
+}
+
+#Diff-Temp {
+  position: absolute;
+  top: 5.5vh;
+  width: 100%;
+  text-align: center;
+  font: 30px Georgia;
+}
+
+/* SCALE TEMPERATURE */
+
+#Temp-Scale {
+  position: absolute;
+  bottom: 1vh;
+  width: 100%;
+  text-align: center;
+  font: 18px Georgia;
+}
+
+#Temp-Scale p {
+  margin: 0
+}
+
+#Temp-Scale ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.scales {
+  list-style-type: none; 
+  width: 4vh;
+  height: 4vh;
+  margin: 0 20px 0 20px;
+  border-radius: 2px;
+  background-color: brown;
+}

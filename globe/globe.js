@@ -94,22 +94,20 @@ DAT.Globe = function(container, opts) {
   // Dataset variables
   var mapCountry = new Map();     // [ Country , [ latitude, longitude ] ]
   var mapClaim = new Map();       // [ Country, [...claims] ]
-  var mapTemperature = new Map(); // [ [ latitude, longitude ], color ]
+  var mapTemperature = new Map(); // [ [ latitude, longitude ], [color, temperature] ]
 
-  var currentClaimTexts = new Array();
   var currentCountries = new Array();
   var maxClaimCount = 3;
   var needUpdate = true;
 
-  var MouseX = 0;
-  var MouseY = 0;
-
   function init() {
+
+    initScale();
 
     container.style.color = '#fff';
     container.style.font = '13px/20px Arial, sans-serif';
 
-    var shader, uniformsh;
+    var shader, uniforms;
     w = container.offsetWidth || window.innerWidth;
     h = container.offsetHeight || window.innerHeight;
 
@@ -219,7 +217,10 @@ DAT.Globe = function(container, opts) {
 
     const coldTemperatureHue = 240;
     const warmTemperatureHue = 0;
-
+    // Temperature [-20, 30]
+    // Average [0.005, 9.44]
+    const maxValue = 9.44
+    const minValue = 0 // negative
 
     opts.animated = opts.animated || false;
     this.is_animated = opts.animated;
@@ -238,7 +239,7 @@ DAT.Globe = function(container, opts) {
       if (this._baseGeometry === undefined) {
         this._baseGeometry = new THREE.Geometry();
         for (i = 0; i < data.length; i++) {
-          let tempRate = ((parseInt(data[i].AverageTemperature) + 20) / 60.0)
+          let tempRate = ((parseInt(data[i].AverageTemperature) + minValue) / (maxValue + minValue))
           let hue = coldTemperatureHue - (tempRate * (coldTemperatureHue - warmTemperatureHue));
           addPoint(data[i].Latitude, data[i].Longitude, 0, HSVtoRGB(hue / 360, 1, 1), this._baseGeometry);
         }
@@ -255,7 +256,7 @@ DAT.Globe = function(container, opts) {
     mapTemperature.clear();
     for (i = 0; i < data.length; i++) {
       // 0 : cold --> 1 : warm
-      let tempRate = ((parseInt(data[i].AverageTemperature) + 20) / 60.0)
+      let tempRate = ((parseInt(data[i].AverageTemperature) + minValue) / (maxValue + minValue))
       let hue = coldTemperatureHue - (tempRate * (coldTemperatureHue - warmTemperatureHue));
       addPoint(data[i].Latitude, data[i].Longitude, 0, HSVtoRGB(hue / 360, 1, 1), subgeo);
       
@@ -263,7 +264,9 @@ DAT.Globe = function(container, opts) {
       const latitude = data[i].Latitude;
       const longitude = data[i].Longitude;
       const hsv = HSVtoRGB(hue / 360, 1, 1);
-      mapTemperature.set({latitude, longitude}, new THREE.Color(hsv.r, hsv.g, hsv.b))
+      const color = new THREE.Color(hsv.r, hsv.g, hsv.b)
+      const temp = (data[i].AverageTemperature).toString().substring(0,3);
+      mapTemperature.set({latitude, longitude}, { color, temp } )
     }
 
     if (opts.animated) {
@@ -459,13 +462,26 @@ DAT.Globe = function(container, opts) {
   
       // Compute Atmosphere Color
       var atmosphereColor = new THREE.Color(1, 1, 1);
+      var temperatureFocus = 0
+      var precisionTemperature = 5
       for (const [key, value] of mapTemperature)
       {
-        if (isPointInsideCameraView(key.latitude, key.longitude, 10))
+        const dstToCamera = DstPointToCamera(key.latitude, key.longitude);
+        if (dstToCamera < precisionTemperature)
         {
-          atmosphereColor = new THREE.Color(value);
-          break;
+          precisionTemperature = dstToCamera;
+          atmosphereColor = new THREE.Color(value.color);
+          temperatureFocus = value.temp
         }
+      }
+
+      // Text Differential Temperature
+      if (precisionTemperature === 5) {
+        atmosphereColor = new THREE.Color(1, 1, 1);
+        document.getElementById("Diff-Temp").innerHTML = ""
+      } else {
+        document.getElementById("Diff-Temp").innerHTML = "+" + temperatureFocus + "°C"
+        document.getElementById("Diff-Temp").style.color = "rgb(" + atmosphereColor.r * 255 + "," + atmosphereColor.g * 255 + "," + atmosphereColor.b * 255 + ")";
       }
   
       materialAtmo.uniforms.color.value = atmosphereColor;
@@ -490,6 +506,12 @@ DAT.Globe = function(container, opts) {
   {
     const coordinatesCamera = getLatitudeAndLongitude();
     return Math.abs(coordinatesCamera[0] - latitude) < precision && Math.abs(coordinatesCamera[1] - longitude) < precision;
+  }
+
+  function DstPointToCamera(latitude, longitude)
+  {
+    const coordinatesCamera = getLatitudeAndLongitude();
+    return Math.abs(coordinatesCamera[0] - latitude) + Math.abs(coordinatesCamera[1] - longitude);
   }
 
   function initClaims(data)
@@ -572,6 +594,21 @@ DAT.Globe = function(container, opts) {
     }
     return -1;
   }
+
+  function initScale()
+  {
+    const containerUl = document.getElementById("Temp-Scale").getElementsByTagName("ul")[0];
+
+    for (let i = 0; i < 10; i++) {
+      let liScale = document.createElement("li");
+      liScale.className = "scales"
+      const color = HSVtoRGB((i * 36.0) / 360.0, 1, 1)
+      liScale.style.backgroundColor = "rgb(" + color.r * 255 + "," + color.g * 255 + "," + color.b * 255 + ")";
+      containerUl.appendChild(liScale)
+      
+    }
+  }
+
 
   init();
   this.animate = animate;
