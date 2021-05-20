@@ -576,11 +576,11 @@ DAT.Globe = function(container, opts) {
     const divClaim = document.createElement("div");
     divClaim.className = "claim";
 
-    let top = Math.floor(Math.random() * 600) + 50; // returns a random integer from 50 to 600
-    let left;
+    let left, top;
     do {
+      top = Math.floor(Math.random() * 600) + 50;   // returns a random integer from 50 to 600
       left = Math.floor(Math.random() * 1500) + 50; // returns a random integer from 50 to 1600
-    } while (left > 350 && left < 1300);
+    } while (left > 350 && left < 1300 || isClaimColliding(top, left)); 
 
     divClaim.style.top = top + "px";
     divClaim.style.left = left + "px";
@@ -588,7 +588,7 @@ DAT.Globe = function(container, opts) {
     divClaim.appendChild(divMessage);
     
     container.appendChild(divClaim).focus();
-    divClaim.className += " focus"
+    divClaim.className += " focus";
   }
 
   function deleteClaim(country, indexInArray)
@@ -606,6 +606,18 @@ DAT.Globe = function(container, opts) {
       container.removeChild(container.children[index]);
       currentCountries.splice(indexInArray, 1);
     }
+  }
+
+  function isClaimColliding(top, left) {
+    const container = document.getElementById("Claim-Container").children;
+    for (const child of container) {
+      domRect = child.getBoundingClientRect();
+      if ((left <= (domRect.right) && (left + 350) >= domRect.left) &&
+          (top <= (domRect.bottom) && (top + 300) >= domRect.top)) {
+        return true
+      }
+    }
+    return false;
   }
 
   function isCountryClaimOnScreen(country)
