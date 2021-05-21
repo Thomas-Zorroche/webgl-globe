@@ -19,40 +19,53 @@ def csv_to_json(csvFilePath, jsonFilePath):
     # Remove unnecessary lines
     jsonResult = []
     compteur = 0
-    temperature1910 = 0
+    temperature1910 = [] # temperatures of 1910
+    differenceTemperature = []
     min = 1000
     max = 0
+    monthIndex = 0
     for element in jsonArray:
         compteur+=1
-        if (compteur % 10000 == 0): print((compteur*100) / len(jsonArray))
+        if (compteur % 100000 == 0): print((compteur*100) / len(jsonArray))
 
-        if element["dt"] == "1910-01-01":
-            temperature1910 = element["AverageTemperature"]
+        if element["dt"][0 : 4] == "1901":
+            temperature1910.append(float(element["AverageTemperature"]))
             continue
         
-        if element["dt"] != "2010-01-01":
-            continue
+        if element["dt"][0 : 4] == "2012":
+            differenceTemperature.append(float(element["AverageTemperature"]) - float(temperature1910[monthIndex]))
+            monthIndex += 1
 
-        element["AverageTemperature"] = abs(float(element["AverageTemperature"]) - float(temperature1910))
-        if (element["AverageTemperature"] > max):
-            max = element["AverageTemperature"]
-        if (element["AverageTemperature"] < min):
-            min = element["AverageTemperature"]
+        if element["dt"] == "2012-12-01":  
+            AverageTemperature = 0
+            for temp in differenceTemperature:     
+                AverageTemperature += temp
+            element["AverageTemperature"] = AverageTemperature / 12.0
 
-        element.pop('AverageTemperatureUncertainty', None)
-        element.pop('City', None)
-        element.pop('Country', None)      
+            if (element["AverageTemperature"] > max):
+                max = element["AverageTemperature"]
+            if (element["AverageTemperature"] < min):
+                min = element["AverageTemperature"]
 
-        if 'S' in element["Latitude"]:
-            element["Latitude"] = "-" + element["Latitude"]
-        if 'W' in element["Longitude"]:
-            element["Longitude"] = "-" + element["Longitude"]
-        # remove letter
-        element["Latitude"] = element["Latitude"][:-1]
-        element["Longitude"] = element["Longitude"][:-1]
+            element.pop('AverageTemperatureUncertainty', None)
+            element.pop('City', None)
+            element.pop('Country', None)      
 
-        # add element to jsonResult
-        jsonResult.append(element)
+            if 'S' in element["Latitude"]:
+                element["Latitude"] = "-" + element["Latitude"]
+            if 'W' in element["Longitude"]:
+                element["Longitude"] = "-" + element["Longitude"]
+            # remove letter
+            element["Latitude"] = element["Latitude"][:-1]
+            element["Longitude"] = element["Longitude"][:-1]
+
+            # add element to jsonResult
+            jsonResult.append(element)
+
+            # clear arrays
+            temperature1910.clear()
+            differenceTemperature.clear()
+            monthIndex = 0
 
     print(min)
     print("\n")
@@ -65,6 +78,6 @@ def csv_to_json(csvFilePath, jsonFilePath):
 
 
 csvFilePath = r'C:\wamp64\www\webgl-globe\globe\archive_temperature\GlobalLandTemperaturesByCity.csv'
-jsonFilePath = r'C:\wamp64\www\webgl-globe\globe\archive_temperature\GlobalLandTemperaturesByCity2.json'
+jsonFilePath = r'C:\wamp64\www\webgl-globe\globe\archive_temperature\GlobalLandTemperaturesByCity3.json'
 
 csv_to_json(csvFilePath, jsonFilePath)

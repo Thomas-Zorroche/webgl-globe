@@ -107,6 +107,24 @@
   font-family: "Helvetica";
 }
 
+#Cont-Scale {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#Cont-Scale span {
+  font-family: "Bebas";
+  font-size: 28px;
+}
+
+#Cont-Scale span:first-child {
+  color: rgb(255, 255, 255);
+}
+#Cont-Scale span:last-child {
+  color: rgb(255, 255, 255);
+}
+
 #Temp-Scale p {
   margin: 0
 }
@@ -124,5 +142,19 @@
   height: 4vh;
   margin: 0 20px 0 20px;
   border-radius: 2px;
-  background-color: rgb(255, 255, 255);
+  background-color: rgba(255, 255, 255, 0.335);
+}
+
+/* CROSS */
+
+#Cross {
+  z-index: 50;
+  width: 100%;
+  top: 50vh;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items:center;
+  pointer-events:none;
+  transform: scale(0.5);
 }

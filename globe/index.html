@@ -107,8 +107,16 @@
   <div id="Diff-Temp"></div>
   
   <div id="Temp-Scale">
-    <p>Difference of Temperature between 1900 and 2010</p>
-    <ul></ul>
+    <p>Difference of Temperature between 1900 and 2013</p>
+    <div id="Cont-Scale">
+      <span></span>
+      <ul></ul>
+      <span></span>
+    </div>
+  </div>
+
+  <div id="Cross">
+    <img src="cross.png"/>
   </div>
 
   <div id="Claim-Container">
@@ -156,7 +164,7 @@
 
       // Temperature Dataset
       xhr = new XMLHttpRequest();
-      xhr.open('GET', './archive_temperature/GlobalLandTemperaturesByCity2.json', true);
+      xhr.open('GET', './archive_temperature/GlobalLandTemperaturesByCity3.json', true);
       xhr.onreadystatechange = function(e) {
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {

@@ -100,10 +100,10 @@ DAT.Globe = function(container, opts) {
   var maxClaimCount = 3;
   var needUpdate = true;
 
-  const coldTemperatureHue = 80;
+  const coldTemperatureHue = 70;
   const warmTemperatureHue = 0;
-  const maxValue = 9.44
-  const minValue = 0 
+  const maxValue = 3.7
+  const minValue = 0.3
 
   function init() {
 
@@ -446,7 +446,7 @@ DAT.Globe = function(container, opts) {
       for (const [key, value] of mapCountry)
       {
         // If a country is in focus, and its claim is not already on screen, and that totalClaims < maxClaimCount
-        if (isPointInsideCameraView(value.latitude, value.longitude, 10)) {
+        if (isPointInsideCameraView(value.latitude, value.longitude, 5)) {
           if (currentCountries.length < maxClaimCount && isCountryClaimOnScreen(key) == -1) {
             let country = key;
             let message = getRandomClaimMessage(country);
@@ -485,12 +485,16 @@ DAT.Globe = function(container, opts) {
       }
 
       // Transfrom Scale
+      const indexScale = Math.floor( temperatureFocus );
+      var UlContainer = document.getElementById("Temp-Scale").getElementsByTagName("ul")[0];
       if (temperatureFocus !== -1) {
-        const indexScale = Math.floor( temperatureFocus );
-        var UlContainer = document.getElementById("Temp-Scale").getElementsByTagName("ul")[0];
         for (let i = 0; i < UlContainer.children.length; i++) {
           const scaleValue = 1 / (1 + Math.abs(indexScale - i));
           UlContainer.children[i].style.transform = "scale(" + scaleValue + ")";
+        }
+      } else {
+        for (let i = 0; i < UlContainer.children.length; i++) {
+          UlContainer.children[i].style.transform = "scale(" + 0.25 + ")";
         }
       }
   
@@ -635,13 +639,24 @@ DAT.Globe = function(container, opts) {
     const containerUl = document.getElementById("Temp-Scale").getElementsByTagName("ul")[0];
     const step = coldTemperatureHue / 10.0
 
+    let colorMax, colorMin;
     for (let i = 0; i < 10; i++) {
       let liScale = document.createElement("li");
       liScale.className = "scales"
       const color = HSVtoRGB((coldTemperatureHue - (i * step)) / 360.0, 1, 1)
       liScale.style.backgroundColor = "rgb(" + color.r * 255 + "," + color.g * 255 + "," + color.b * 255 + ")";
       containerUl.appendChild(liScale)
+      if (i == 0) colorMin = color
+      if (i == 9) colorMax = color
     }
+
+    // Init span scales
+    var spanElements = document.getElementById("Temp-Scale").getElementsByTagName("span");
+    spanElements[0].innerHTML = "-" + minValue + "°C";
+    spanElements[0].style.color = "rgb(" + colorMin.r * 255 + "," + colorMin.g * 255 + "," + colorMin.b * 255 + ")";;
+    spanElements[1].innerHTML = "+" + maxValue + "°C"; 
+    spanElements[1].style.color = "rgb(" + colorMax.r * 255 + "," + colorMax.g * 255 + "," + colorMax.b * 255 + ")";;
+
   }
 
 
