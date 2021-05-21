@@ -149,12 +149,12 @@
 
 #Cross {
   z-index: 50;
-  width: 100%;
-  top: 50vh;
-  position: absolute;
   display: flex;
   justify-content: center;
   align-items:center;
-  pointer-events:none;
-  transform: scale(0.5);
+  
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.5);
 }

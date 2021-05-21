@@ -102,7 +102,7 @@ DAT.Globe = function(container, opts) {
 
   const coldTemperatureHue = 70;
   const warmTemperatureHue = 0;
-  const maxValue = 3.7
+  const maxValue = 3
   const minValue = 0.3
 
   function init() {
@@ -463,7 +463,7 @@ DAT.Globe = function(container, opts) {
       // Compute Atmosphere Color
       var atmosphereColor = new THREE.Color(1, 1, 1);
       var temperatureFocus = -1
-      var precisionTemperature = 5
+      var precisionTemperature = 3
       for (const [key, value] of mapTemperature)
       {
         const dstToCamera = DstPointToCamera(key.latitude, key.longitude);
@@ -476,7 +476,7 @@ DAT.Globe = function(container, opts) {
       }
 
       // Text Differential Temperature
-      if (precisionTemperature === 5) {
+      if (temperatureFocus === -1) {
         atmosphereColor = new THREE.Color(1, 1, 1);
         document.getElementById("Diff-Temp").innerHTML = ""
       } else {
@@ -485,7 +485,7 @@ DAT.Globe = function(container, opts) {
       }
 
       // Transfrom Scale
-      const indexScale = Math.floor( temperatureFocus );
+      const indexScale = Math.floor((parseInt(temperatureFocus) + minValue) * (10 / (maxValue + minValue)));
       var UlContainer = document.getElementById("Temp-Scale").getElementsByTagName("ul")[0];
       if (temperatureFocus !== -1) {
         for (let i = 0; i < UlContainer.children.length; i++) {
@@ -582,9 +582,9 @@ DAT.Globe = function(container, opts) {
 
     let left, top;
     do {
-      top = Math.floor(Math.random() * 600) + 50;   // returns a random integer from 50 to 600
-      left = Math.floor(Math.random() * 1500) + 50; // returns a random integer from 50 to 1600
-    } while (left > 350 && left < 1300 || isClaimColliding(top, left)); 
+      top = Math.floor(Math.random() * 0.5 * window.innerHeight) + (0.04 * window.innerHeight);
+      left = Math.floor(Math.random() * 0.78 * window.innerWidth) + (0.02 * window.innerWidth);
+    } while (left > (0.18 * window.innerWidth) && left < (0.67 * window.innerWidth) || isClaimColliding(top, left)); 
 
     divClaim.style.top = top + "px";
     divClaim.style.left = left + "px";
@@ -656,7 +656,6 @@ DAT.Globe = function(container, opts) {
     spanElements[0].style.color = "rgb(" + colorMin.r * 255 + "," + colorMin.g * 255 + "," + colorMin.b * 255 + ")";;
     spanElements[1].innerHTML = "+" + maxValue + "°C"; 
     spanElements[1].style.color = "rgb(" + colorMax.r * 255 + "," + colorMax.g * 255 + "," + colorMax.b * 255 + ")";;
-
   }
 
 
