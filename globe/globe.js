@@ -100,9 +100,9 @@ DAT.Globe = function(container, opts) {
   var maxClaimCount = 3;
   var needUpdate = true;
 
-  const coldTemperatureHue = 70;
+  const coldTemperatureHue = 50;
   const warmTemperatureHue = 0;
-  const maxValue = 3
+  const maxValue = 3.0
   const minValue = 0.3
 
   function init() {
@@ -449,9 +449,9 @@ DAT.Globe = function(container, opts) {
         if (isPointInsideCameraView(value.latitude, value.longitude, 5)) {
           if (currentCountries.length < maxClaimCount && isCountryClaimOnScreen(key) == -1) {
             let country = key;
-            let message = getRandomClaimMessage(country);
+            let claim = getRandomClaimMessage(country);
             currentCountries.push(country);
-            createClaim(country, message);
+            createClaim(country, claim);
           }
         }
         // If a country is not in focus but still have it claim on screen, delete it
@@ -538,7 +538,7 @@ DAT.Globe = function(container, opts) {
       mapCountry.set(claim.country, {latitude, longitude});
 
       // Map Claims
-      const message = claim.text;
+      const message = [claim.text, claim.claim];
       const arrayClaims = mapClaim.get(claim.country) || [];
 
       mapClaim.set(claim.country, [...arrayClaims, message]);
@@ -553,7 +553,7 @@ DAT.Globe = function(container, opts) {
     return randomClaim;
   }
 
-  function createClaim(country, messsage)
+  function createClaim(country, claim)
   {
     const container = document.getElementById("Claim-Container");
 
@@ -563,6 +563,7 @@ DAT.Globe = function(container, opts) {
     const divPP= document.createElement("span");
     divPP.className = "pp";
     divPP.innerHTML = "";
+    divPP.style.backgroundColor = getPPColor(claim[1])
     const spanFAKE = document.createElement("span");
     spanFAKE.className = "fake";
     spanFAKE.innerHTML = "FAKE NEWS";
@@ -575,7 +576,7 @@ DAT.Globe = function(container, opts) {
 
     const divMessage = document.createElement("div");
     divMessage.className = "claim-text";
-    divMessage.innerHTML = messsage;
+    divMessage.innerHTML = claim[0];
 
     const divClaim = document.createElement("div");
     divClaim.className = "claim";
@@ -653,10 +654,37 @@ DAT.Globe = function(container, opts) {
     // Init span scales
     var spanElements = document.getElementById("Temp-Scale").getElementsByTagName("span");
     spanElements[0].innerHTML = "-" + minValue + "°C";
-    spanElements[0].style.color = "rgb(" + colorMin.r * 255 + "," + colorMin.g * 255 + "," + colorMin.b * 255 + ")";;
+    spanElements[0].style.color = "rgb(" + colorMin.r * 255 + "," + colorMin.g * 255 + "," + colorMin.b * 255 + ")";
     spanElements[1].innerHTML = "+" + maxValue + "°C"; 
-    spanElements[1].style.color = "rgb(" + colorMax.r * 255 + "," + colorMax.g * 255 + "," + colorMax.b * 255 + ")";;
+    spanElements[1].style.color = "rgb(" + colorMax.r * 255 + "," + colorMax.g * 255 + "," + colorMax.b * 255 + ")";
+
+    // Init type scale color
+    var spanElementsType = document.getElementById("Type-Scale").getElementsByTagName("span");
+    for (let i = 0; i < spanElementsType.length; i++)
+      spanElementsType[i].style.backgroundColor = getPPColor(i.toString());
   }
+
+  function getPPColor(type)
+  {
+    const index = parseInt(type.substring(0, 1));
+    switch (index)
+    {
+    case 0: return "#ADADAD" // No Claim
+      
+    case 1: return "#FF5964" // Global warming is not happening
+      
+    case 2: return "#FFE74C" // Human greenhouse gases are not causing climate change 
+    
+    case 3: return "#6BF178" // Climate impacts/global warming is beneficial/not bad
+    
+    case 4: return "#35A7FF" // Climate solutions won’t work
+    
+    case 5: return "#FFA058" // Climate movement/science is unreliable
+
+    default: return "#ADADAD"
+    }
+  }
+
 
 
   init();

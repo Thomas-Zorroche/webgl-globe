@@ -94,6 +94,17 @@
 
   <div id="container"></div>
 
+  <p id="Claim-Type-Text">CLAIM TYPE</p>
+
+  <div id="Type-Scale">
+    <p><span onmouseover="focusTypeScale(this)" onmouseout="defocusTypeScale(this)"></span>No Type</p>
+    <p><span onmouseover="focusTypeScale(this)" onmouseout="defocusTypeScale(this)"></span>Global warming is not happening </p>
+    <p><span onmouseover="focusTypeScale(this)" onmouseout="defocusTypeScale(this)"></span>Human greenhouse gases are not causing climate change</p>
+    <p><span onmouseover="focusTypeScale(this)" onmouseout="defocusTypeScale(this)"></span>Climate impacts/global warming is beneficial/not bad</p>
+    <p><span onmouseover="focusTypeScale(this)" onmouseout="defocusTypeScale(this)"></span>Climate solutions won’t work</p>
+    <p><span onmouseover="focusTypeScale(this)" onmouseout="defocusTypeScale(this)"></span>Climate movement/science is unreliable</p>
+  </div>
+
   <div id="currentInfo">
     <span id="year1990" class="year">1990</span>
     <span id="year1995" class="year">1995</span>
@@ -122,12 +133,27 @@
   <div id="Claim-Container">
   </div>
 
-
   <script type="text/javascript" src="third-party/Detector.js"></script>
   <script type="text/javascript" src="third-party/three.min.js"></script>
   <script type="text/javascript" src="third-party/Tween.js"></script>
   <script type="text/javascript" src="globe.js"></script>
   <script type="text/javascript">
+
+    function focusTypeScale(e)
+    {
+      e.parentNode.style.color = "rgba(255, 255, 255, 1)"
+      e.parentNode.style.boxShadow = "0px 0px 30px 5px rgb(0, 0, 0, 1)";
+      e.parentNode.style.backgroundColor = "rgb(0, 0, 0, 1)"
+      e.parentNode.style.transform = "translate(4px)"
+    }
+
+    function defocusTypeScale(e)
+    {
+      e.parentNode.style.color = "rgba(255, 255, 255, 0)"
+      e.parentNode.style.boxShadow = "0px 0px 40px 20px rgb(0, 0, 0, 0)";
+      e.parentNode.style.backgroundColor = "rgb(0, 0, 0, 0)"
+      e.parentNode.style.transform = "translate(-4px)"
+    }
 
     if(!Detector.webgl){
       Detector.addGetWebGLMessage();
